@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Post = require('../models/Post');
+const Comment = require('../models/Comment');
 
 // @desc    Get all posts for admin (including drafts)
 // @route   GET /api/admin/posts
@@ -43,6 +44,44 @@ exports.getAllPosts = async (req, res) => {
             count: posts.length,
             total,
             data: posts
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+};
+
+// @desc    Get all comments for admin (for moderation)
+// @route   GET /api/admin/comments
+// @access  Private/Admin
+exports.getAllComments = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 20;
+        const startIndex = (page - 1) * limit;
+
+        let query = {};
+
+        // Filter by approval status if specified
+        if (req.query.isApproved !== undefined) {
+            query.isApproved = req.query.isApproved === 'true';
+        }
+
+        const total = await Comment.countDocuments(query);
+        const comments = await Comment.find(query)
+            .populate('author', 'name email')
+            .populate('post', 'title slug')
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .skip(startIndex);
+
+        res.json({
+            success: true,
+            count: comments.length,
+            total,
+            data: comments
         });
     } catch (error) {
         res.status(500).json({
@@ -167,6 +206,9 @@ exports.getDashboardStats = async (req, res) => {
         const totalPosts = await Post.countDocuments();
         const publishedPosts = await Post.countDocuments({ status: 'published' });
         const draftPosts = await Post.countDocuments({ status: 'draft' });
+        const totalComments = await Comment.countDocuments();
+        const approvedComments = await Comment.countDocuments({ isApproved: true });
+        const pendingComments = await Comment.countDocuments({ isApproved: false });
 
         // Get top authors using aggregation pipeline
         const topAuthors = await Post.aggregate([
@@ -223,7 +265,10 @@ exports.getDashboardStats = async (req, res) => {
                     totalUsers,
                     totalPosts,
                     publishedPosts,
-                    draftPosts
+                    draftPosts,
+                    totalComments,
+                    approvedComments,
+                    pendingComments
                 },
                 topAuthors,
                 recentPosts

@@ -43,22 +43,21 @@ const Profile = () => {
                     </div>
 
                     <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6"><div className="bg-gray-50 rounded-lg p-4">
-                            <div className="flex items-center space-x-4">
-                                <InitialsAvatar
-                                    name={user?.name}
-                                    size="h-16 w-16"
-                                    textSize="text-xl"
-                                />
-                                <div>
-                                    <h3 className="text-lg font-medium text-gray-900">{user?.name}</h3>
-                                    <p className="text-sm text-gray-600">{user?.email}</p>
-                                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${user?.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'
-                                        }`}>
-                                        {user?.role}
-                                    </span>
-                                </div>
+                        <div className="flex items-center space-x-4">
+                            <InitialsAvatar
+                                name={user?.name}
+                                size="xl"
+                            />
+                            <div>
+                                <h3 className="text-lg font-medium text-gray-900">{user?.name}</h3>
+                                <p className="text-sm text-gray-600">{user?.email}</p>
+                                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${user?.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'
+                                    }`}>
+                                    {user?.role}
+                                </span>
                             </div>
-                        </div><div>
+                        </div>
+                    </div><div>
                             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                                 Name *
                             </label>

@@ -200,8 +200,7 @@ const AdminDashboard = () => {
                                                     <div className="flex items-center">
                                                         <InitialsAvatar
                                                             name={post.author?.name}
-                                                            size="h-6 w-6"
-                                                            textSize="text-xs"
+                                                            size="xs"
                                                             className="mr-2"
                                                         />
                                                         <span className="text-sm text-gray-900">{post.author?.name}</span>
