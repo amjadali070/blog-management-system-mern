@@ -4,8 +4,8 @@ A comprehensive full-stack blog management system built with MongoDB, Express.js
 
 ## 🚀 Live Demo
 
-- **Frontend**: [Deployed URL will be here]
-- **Backend API**: [API URL will be here]
+- **Frontend**: [[Deployed URL will be here](https://blog-management-system-mern.vercel.app/)]
+- **Backend API**: [[API URL will be here](https://blog-mern-backend-8f5371eb2be4.herokuapp.com/)]
 
 ## 📋 Features
 
