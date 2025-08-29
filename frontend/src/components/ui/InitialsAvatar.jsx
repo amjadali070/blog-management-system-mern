@@ -12,21 +12,17 @@ export const InitialsAvatar = ({ name, size = 'md', className = '' }) => {
     const initials = getInitials(name);
     const bgColor = getAvatarColor(name);
 
-    // Debug logging (remove in production)
-    if (!name) {
-        console.log('InitialsAvatar: No name provided', { name, initials, bgColor });
-    }
-
-    // Size mappings for different avatar sizes
+    // Complex size mapping system for consistent avatar sizing across the app
+    // Maps semantic size names to Tailwind CSS classes for maintainability
     const sizeClasses = {
-        xs: 'h-6 w-6 text-xs',
-        sm: 'h-8 w-8 text-sm',
-        md: 'h-10 w-10 text-sm',
-        lg: 'h-12 w-12 text-base',
-        xl: 'h-16 w-16 text-xl'
+        xs: 'h-6 w-6 text-xs',     // Very small avatars for lists
+        sm: 'h-8 w-8 text-sm',     // Small avatars for compact layouts
+        md: 'h-10 w-10 text-sm',   // Default medium size
+        lg: 'h-12 w-12 text-base', // Large avatars for profiles
+        xl: 'h-16 w-16 text-xl'    // Extra large for main profile displays
     };
 
-    // Use predefined size or custom classes
+    // Flexible sizing: use predefined size preset or allow custom CSS classes
     const avatarSize = sizeClasses[size] || size;
 
     return (

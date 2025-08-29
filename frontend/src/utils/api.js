@@ -13,10 +13,11 @@ export const api = axios.create({
     timeout: 10000,
 });
 
-// Request interceptor
+// Request interceptor to automatically add authentication token
+// Runs before every request to attach JWT token if available
 api.interceptors.request.use(
     (config) => {
-        // Add auth token if available
+        // Automatically attach auth token to all requests if available
         const token = localStorage.getItem('token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
@@ -28,16 +29,20 @@ api.interceptors.request.use(
     }
 );
 
-// Response interceptor
+// Response interceptor for global error handling and token management
+// Handles common HTTP errors and automatic logout on authentication failure
 api.interceptors.response.use(
     (response) => {
         return response;
     },
     (error) => {
-        // Handle common errors
+        // Global error handling for authentication failures
         if (error.response?.status === 401) {
-            // Unauthorized - clear token and redirect to login
+            // Unauthorized - token expired or invalid, clear local storage
             localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
+
+            // Redirect to login only if not already on login page (prevent infinite redirects)
             if (window.location.pathname !== '/login') {
                 window.location.href = '/login';
             }

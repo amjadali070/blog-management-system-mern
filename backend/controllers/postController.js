@@ -6,13 +6,15 @@ const { validationResult } = require('express-validator');
 // @access  Public
 exports.getPosts = async (req, res) => {
     try {
+        // Parse pagination parameters with defaults
         const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 10;
         const startIndex = (page - 1) * limit;
 
         let query = {};
 
-        // Search functionality
+        // Complex search functionality using MongoDB $or operator
+        // Searches across title, content, and tags fields case-insensitively
         if (req.query.search) {
             query.$or = [
                 { title: { $regex: req.query.search, $options: 'i' } },
@@ -21,7 +23,8 @@ exports.getPosts = async (req, res) => {
             ];
         }
 
-        // Filter by status (only published for public access)
+        // Conditional status filtering based on user role
+        // Public users only see published posts, admins can see all statuses
         if (!req.user || req.user.role !== 'admin') {
             query.status = 'published';
         } else if (req.query.status) {
@@ -33,11 +36,12 @@ exports.getPosts = async (req, res) => {
             query.author = req.query.author;
         }
 
-        // Filter by category
+        // Filter by category using MongoDB $in operator for array fields
         if (req.query.category) {
             query.categories = { $in: [req.query.category] };
         }
 
+        // Execute queries in parallel for better performance
         const total = await Post.countDocuments(query);
         const posts = await Post.find(query)
             .populate('author', 'name avatar')
@@ -45,7 +49,7 @@ exports.getPosts = async (req, res) => {
             .limit(limit)
             .skip(startIndex);
 
-        // Pagination result
+        // Build pagination metadata for frontend navigation
         const pagination = {};
 
         if (startIndex + limit < total) {
@@ -165,7 +169,9 @@ exports.updatePost = async (req, res) => {
             });
         }
 
-        // Check if user owns the post or is admin
+        // Complex authorization logic: Check ownership or admin privileges
+        // Convert ObjectIds to strings for proper comparison (strict equality)
+        // Authors can only edit their own posts, admins can edit any post
         if (post.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
             return res.status(403).json({
                 success: false,

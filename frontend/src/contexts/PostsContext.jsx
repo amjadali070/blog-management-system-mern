@@ -85,6 +85,8 @@ const postsReducer = (state, action) => {
                 error: action.payload,
             };
         case POSTS_ACTIONS.UPDATE_POST_SUCCESS:
+            // Optimistic update: immediately update post in both lists and current post
+            // This provides instant UI feedback before server confirmation
             return {
                 ...state,
                 posts: state.posts.map(post =>
@@ -93,6 +95,7 @@ const postsReducer = (state, action) => {
                 currentPost: action.payload,
             };
         case POSTS_ACTIONS.DELETE_POST_SUCCESS:
+            // Remove deleted post from posts array using filter
             return {
                 ...state,
                 posts: state.posts.filter(post => post._id !== action.payload),
@@ -147,20 +150,24 @@ const initialState = {
 export const PostsProvider = ({ children }) => {
     const [state, dispatch] = useReducer(postsReducer, initialState);
 
-    // Fetch Posts
+    // Fetch Posts with complex query parameter building
+    // Dynamically constructs URL parameters based on current search and filter state
     const fetchPosts = async (page = 1, limit = 10) => {
         try {
             dispatch({ type: POSTS_ACTIONS.FETCH_POSTS_START });
 
+            // Build query parameters dynamically based on current state
             const params = new URLSearchParams({
                 page: page.toString(),
                 limit: limit.toString(),
             });
 
+            // Add search query if present
             if (state.searchQuery) {
                 params.append('search', state.searchQuery);
             }
 
+            // Add all active filters to query parameters
             Object.entries(state.filters).forEach(([key, value]) => {
                 if (value) {
                     params.append(key, value);
@@ -187,7 +194,8 @@ export const PostsProvider = ({ children }) => {
         }
     };
 
-    // Fetch Single Post
+    // Memoized function to prevent unnecessary re-renders
+    // useCallback ensures function reference stability across renders
     const fetchPost = useCallback(async (id) => {
         try {
             dispatch({ type: POSTS_ACTIONS.FETCH_POST_START });

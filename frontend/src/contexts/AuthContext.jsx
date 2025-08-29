@@ -13,7 +13,9 @@ const AUTH_ACTIONS = {
     CLEAR_ERRORS: 'CLEAR_ERRORS',
 };
 
-// Auth Reducer
+// Complex authentication state reducer
+// Manages all authentication-related state transitions
+// Uses reducer pattern for predictable state management
 const authReducer = (state, action) => {
     switch (action.type) {
         case AUTH_ACTIONS.LOGIN_START:
@@ -40,6 +42,7 @@ const authReducer = (state, action) => {
             };
         case AUTH_ACTIONS.LOGIN_FAILURE:
         case AUTH_ACTIONS.LOGOUT:
+            // Reset all auth state on failure or logout
             return {
                 ...state,
                 loading: false,

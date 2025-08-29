@@ -210,18 +210,23 @@ exports.getDashboardStats = async (req, res) => {
         const approvedComments = await Comment.countDocuments({ isApproved: true });
         const pendingComments = await Comment.countDocuments({ isApproved: false });
 
-        // Get top authors using aggregation pipeline
+        // Complex MongoDB aggregation pipeline to get top authors with their post statistics
+        // This pipeline groups posts by author, counts total and published posts,
+        // joins with user data, and sorts by post count
         const topAuthors = await Post.aggregate([
             {
+                // Group all posts by author ID and calculate statistics
                 $group: {
                     _id: '$author',
                     postCount: { $sum: 1 },
                     publishedCount: {
+                        // Conditional count: increment only if status is 'published'
                         $sum: { $cond: [{ $eq: ['$status', 'published'] }, 1, 0] }
                     }
                 }
             },
             {
+                // Join with users collection to get author details
                 $lookup: {
                     from: 'users',
                     localField: '_id',
@@ -230,9 +235,11 @@ exports.getDashboardStats = async (req, res) => {
                 }
             },
             {
+                // Convert author array to single object (since _id is unique)
                 $unwind: '$author'
             },
             {
+                // Shape the output data structure
                 $project: {
                     _id: 0,
                     author: {
@@ -245,6 +252,7 @@ exports.getDashboardStats = async (req, res) => {
                 }
             },
             {
+                // Sort by total post count in descending order
                 $sort: { postCount: -1 }
             },
             {

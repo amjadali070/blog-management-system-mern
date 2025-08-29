@@ -41,16 +41,19 @@ exports.protect = async (req, res, next) => {
 };
 
 // Optional authentication - sets req.user if token is present, but doesn't require it
+// This middleware is used for endpoints that can work with or without authentication
+// (e.g., viewing posts where logged-in users might see additional data)
 exports.optionalAuth = async (req, res, next) => {
     let token;
 
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
+            // Extract token from Authorization header (format: "Bearer <token>")
             token = req.headers.authorization.split(' ')[1];
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             req.user = await User.findById(decoded.id).select('-password');
         } catch (error) {
-            // Token is invalid, but we continue without user
+            // Token is invalid, but we continue without user (graceful degradation)
             req.user = null;
         }
     }
@@ -59,6 +62,8 @@ exports.optionalAuth = async (req, res, next) => {
 };
 
 // Check if user is admin
+// Higher-order function that returns middleware to check user roles
+// Usage: authorize('admin') or authorize('admin', 'moderator')
 exports.authorize = (...roles) => {
     return (req, res, next) => {
         if (!roles.includes(req.user.role)) {
@@ -79,6 +84,8 @@ exports.generateToken = (id) => {
 };
 
 // Generate Refresh Token
+// Refresh tokens have longer expiration and are used to get new access tokens
+// Uses separate secret for added security (can be rotated independently)
 exports.generateRefreshToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET, {
         expiresIn: '7d' // Refresh token expires in 7 days
@@ -86,6 +93,8 @@ exports.generateRefreshToken = (id) => {
 };
 
 // Verify Refresh Token
+// Returns decoded payload if valid, null if invalid/expired
+// Used in token refresh endpoint to validate refresh tokens
 exports.verifyRefreshToken = (token) => {
     try {
         return jwt.verify(token, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET);
