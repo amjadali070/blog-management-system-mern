@@ -52,6 +52,9 @@ const postSchema = new mongoose.Schema({
     timestamps: true
 });
 
+// Create text index for search functionality
+postSchema.index({ title: 'text', content: 'text', tags: 'text' });
+
 // Create slug from title before saving
 postSchema.pre('save', function (next) {
     if (this.isModified('title')) {

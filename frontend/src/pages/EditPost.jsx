@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
@@ -71,9 +72,7 @@ const EditPost = () => {
             if (result.success) {
                 navigate('/dashboard');
             }
-        } catch (error) {
-            console.error('Error updating post:', error);
-        }
+        } catch (error) { console.error(error) }
     };
 
     // Quill modules configuration
@@ -143,26 +142,21 @@ const EditPost = () => {
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
-                        {/* Title */}
-                        <div>
-                            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-                                Title *
-                            </label>
-                            <input
-                                {...register('title')}
-                                type="text"
-                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${errors.title ? 'border-red-300' : 'border-gray-300'
-                                    }`}
-                                placeholder="Enter post title"
-                            />
-                            {errors.title && (
-                                <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
-                            )}
-                        </div>
-
-                        {/* Excerpt */}
-                        <div>
+                    <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6"><div>
+                        <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+                            Title *
+                        </label>
+                        <input
+                            {...register('title')}
+                            type="text"
+                            className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${errors.title ? 'border-red-300' : 'border-gray-300'
+                                }`}
+                            placeholder="Enter post title"
+                        />
+                        {errors.title && (
+                            <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+                        )}
+                    </div><div>
                             <label htmlFor="excerpt" className="block text-sm font-medium text-gray-700 mb-2">
                                 Excerpt
                             </label>
@@ -176,10 +170,7 @@ const EditPost = () => {
                             {errors.excerpt && (
                                 <p className="mt-1 text-sm text-red-600">{errors.excerpt.message}</p>
                             )}
-                        </div>
-
-                        {/* Featured Image */}
-                        <div>
+                        </div><div>
                             <label htmlFor="featuredImage" className="block text-sm font-medium text-gray-700 mb-2">
                                 <Image className="inline h-4 w-4 mr-1" />
                                 Featured Image URL
@@ -204,10 +195,7 @@ const EditPost = () => {
                                     />
                                 </div>
                             )}
-                        </div>
-
-                        {/* Content */}
-                        <div>
+                        </div><div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Content *
                             </label>
@@ -229,10 +217,7 @@ const EditPost = () => {
                             {errors.content && (
                                 <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
                             )}
-                        </div>
-
-                        {/* Categories and Tags */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        </div><div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label htmlFor="categories" className="block text-sm font-medium text-gray-700 mb-2">
                                     <Tag className="inline h-4 w-4 mr-1" />
@@ -260,10 +245,7 @@ const EditPost = () => {
                                 />
                                 <p className="mt-1 text-xs text-gray-500">Separate multiple tags with commas</p>
                             </div>
-                        </div>
-
-                        {/* Status */}
-                        <div>
+                        </div><div>
                             <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
                                 Status *
                             </label>
@@ -278,10 +260,7 @@ const EditPost = () => {
                             {errors.status && (
                                 <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>
                             )}
-                        </div>
-
-                        {/* Submit Buttons */}
-                        <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+                        </div><div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
                             <button
                                 type="button"
                                 onClick={() => navigate('/dashboard')}

@@ -24,7 +24,6 @@ exports.getUsers = async (req, res) => {
             data: users
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
@@ -65,7 +64,6 @@ exports.updateUserRole = async (req, res) => {
             data: user
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
@@ -102,7 +100,6 @@ exports.deleteUser = async (req, res) => {
             message: 'User deleted successfully'
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
@@ -120,6 +117,48 @@ exports.getDashboardStats = async (req, res) => {
         const publishedPosts = await Post.countDocuments({ status: 'published' });
         const draftPosts = await Post.countDocuments({ status: 'draft' });
 
+        // Get top authors using aggregation pipeline
+        const topAuthors = await Post.aggregate([
+            {
+                $group: {
+                    _id: '$author',
+                    postCount: { $sum: 1 },
+                    publishedCount: {
+                        $sum: { $cond: [{ $eq: ['$status', 'published'] }, 1, 0] }
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'author'
+                }
+            },
+            {
+                $unwind: '$author'
+            },
+            {
+                $project: {
+                    _id: 0,
+                    author: {
+                        id: '$author._id',
+                        name: '$author.name',
+                        email: '$author.email'
+                    },
+                    postCount: 1,
+                    publishedCount: 1
+                }
+            },
+            {
+                $sort: { postCount: -1 }
+            },
+            {
+                $limit: 5
+            }
+        ]);
+
         // Get recent posts
         const recentPosts = await Post.find()
             .populate('author', 'name')
@@ -135,11 +174,11 @@ exports.getDashboardStats = async (req, res) => {
                     publishedPosts,
                     draftPosts
                 },
+                topAuthors,
                 recentPosts
             }
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'

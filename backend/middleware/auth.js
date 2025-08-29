@@ -25,7 +25,6 @@ exports.protect = async (req, res, next) => {
 
             next();
         } catch (error) {
-            console.error(error);
             return res.status(401).json({
                 success: false,
                 message: 'Not authorized, token failed'
@@ -59,4 +58,20 @@ exports.generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRE
     });
+};
+
+// Generate Refresh Token
+exports.generateRefreshToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET, {
+        expiresIn: '7d' // Refresh token expires in 7 days
+    });
+};
+
+// Verify Refresh Token
+exports.verifyRefreshToken = (token) => {
+    try {
+        return jwt.verify(token, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET);
+    } catch (error) {
+        return null;
+    }
 };

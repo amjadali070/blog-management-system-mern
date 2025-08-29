@@ -94,8 +94,8 @@ export const AuthProvider = ({ children }) => {
                         type: AUTH_ACTIONS.LOAD_USER,
                         payload: response.data.data.user,
                     });
+                    // eslint-disable-next-line no-unused-vars
                 } catch (error) {
-                    console.error('Load user error:', error);
                     dispatch({ type: AUTH_ACTIONS.LOGOUT });
                 }
             } else {

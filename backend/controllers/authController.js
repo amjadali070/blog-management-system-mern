@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const { generateToken } = require('../middleware/auth');
+const { generateToken, generateRefreshToken, verifyRefreshToken } = require('../middleware/auth');
 const { validationResult } = require('express-validator');
 
 // @desc    Register user
@@ -36,14 +36,16 @@ exports.register = async (req, res) => {
             role: role || 'author'
         });
 
-        // Generate token
+        // Generate tokens
         const token = generateToken(user._id);
+        const refreshToken = generateRefreshToken(user._id);
 
         res.status(201).json({
             success: true,
             message: 'User registered successfully',
             data: {
                 token,
+                refreshToken,
                 user: {
                     id: user._id,
                     name: user.name,
@@ -54,7 +56,6 @@ exports.register = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
@@ -97,14 +98,16 @@ exports.login = async (req, res) => {
             });
         }
 
-        // Generate token
+        // Generate tokens
         const token = generateToken(user._id);
+        const refreshToken = generateRefreshToken(user._id);
 
         res.json({
             success: true,
             message: 'Login successful',
             data: {
                 token,
+                refreshToken,
                 user: {
                     id: user._id,
                     name: user.name,
@@ -115,7 +118,6 @@ exports.login = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
@@ -144,7 +146,6 @@ exports.getMe = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
@@ -180,10 +181,65 @@ exports.updateProfile = async (req, res) => {
             }
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
+        });
+    }
+};
+
+// @desc    Refresh access token
+// @route   POST /api/auth/refresh
+// @access  Public
+exports.refresh = async (req, res) => {
+    try {
+        const { refreshToken } = req.body;
+
+        if (!refreshToken) {
+            return res.status(401).json({
+                success: false,
+                message: 'Refresh token is required'
+            });
+        }
+
+        const decoded = verifyRefreshToken(refreshToken);
+        if (!decoded) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid refresh token'
+            });
+        }
+
+        // Get user
+        const user = await User.findById(decoded.id);
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        // Generate new access token
+        const token = generateToken(user._id);
+
+        res.json({
+            success: true,
+            message: 'Token refreshed successfully',
+            data: {
+                token,
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    avatar: user.avatar
+                }
+            }
+        });
+    } catch (error) {
+        res.status(401).json({
+            success: false,
+            message: 'Invalid refresh token'
         });
     }
 };

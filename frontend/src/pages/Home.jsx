@@ -34,9 +34,7 @@ const Home = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Hero Section */}
-            <div className="bg-white">
+        <div className="min-h-screen bg-gray-50"><div className="bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <div className="text-center">
                         <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl md:text-6xl">
@@ -49,10 +47,7 @@ const Home = () => {
                         </p>
                     </div>
                 </div>
-            </div>
-
-            {/* Search Section */}
-            <div className="bg-white border-b">
+            </div><div className="bg-white border-b">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <form onSubmit={handleSearch} className="max-w-xl mx-auto">
                         <div className="relative">
@@ -92,10 +87,7 @@ const Home = () => {
                         </div>
                     )}
                 </div>
-            </div>
-
-            {/* Posts Grid */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            </div><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {loading ? (
                     <div className="flex justify-center items-center py-12">
                         <div className="spinner"></div>
@@ -166,10 +158,7 @@ const Home = () => {
                                     </div>
                                 </article>
                             ))}
-                        </div>
-
-                        {/* Pagination */}
-                        {pagination && (pagination.next || pagination.prev) && (
+                        </div>{pagination && (pagination.next || pagination.prev) && (
                             <div className="mt-8 flex justify-center">
                                 <nav className="flex items-center space-x-2">
                                     {pagination.prev && (
@@ -195,10 +184,7 @@ const Home = () => {
                                     )}
                                 </nav>
                             </div>
-                        )}
-
-                        {/* Posts Count */}
-                        <div className="mt-4 text-center text-sm text-gray-600">
+                        )}<div className="mt-4 text-center text-sm text-gray-600">
                             Showing {posts.length} of {total} posts
                         </div>
                     </>

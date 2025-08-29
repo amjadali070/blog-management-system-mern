@@ -4,7 +4,8 @@ const {
     register,
     login,
     getMe,
-    updateProfile
+    updateProfile,
+    refresh
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 
@@ -20,6 +21,10 @@ router.post('/login', [
     body('email').isEmail().withMessage('Please enter a valid email'),
     body('password').exists().withMessage('Password is required')
 ], login);
+
+router.post('/refresh', [
+    body('refreshToken').exists().withMessage('Refresh token is required')
+], refresh);
 
 router.get('/me', protect, getMe);
 router.put('/profile', protect, updateProfile);

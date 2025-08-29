@@ -42,9 +42,7 @@ const Dashboard = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Header */}
-                <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"><div className="bg-white rounded-lg shadow-sm p-6 mb-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
                         <div>
                             <h1 className="text-2xl font-bold text-gray-900">
@@ -62,10 +60,7 @@ const Dashboard = () => {
                             New Post
                         </Link>
                     </div>
-                </div>
-
-                {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                </div><div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     <div className="bg-white rounded-lg shadow-sm p-6">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
@@ -111,17 +106,12 @@ const Dashboard = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-
-                {/* Posts Section */}
-                <div className="bg-white rounded-lg shadow-sm">
+                </div><div className="bg-white rounded-lg shadow-sm">
                     <div className="p-6 border-b border-gray-200">
                         <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
                             <h2 className="text-lg font-medium text-gray-900">Your Posts</h2>
 
-                            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                                {/* Search */}
-                                <form onSubmit={handleSearch} className="relative">
+                            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"><form onSubmit={handleSearch} className="relative">
                                     <input
                                         type="text"
                                         value={searchQuery}
@@ -132,10 +122,7 @@ const Dashboard = () => {
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <Search className="h-5 w-5 text-gray-400" />
                                     </div>
-                                </form>
-
-                                {/* Status Filter */}
-                                <div className="relative">
+                                </form><div className="relative">
                                     <select
                                         value={statusFilter}
                                         onChange={(e) => setStatusFilter(e.target.value)}
@@ -151,10 +138,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Posts List */}
-                    <div className="overflow-hidden">
+                    </div><div className="overflow-hidden">
                         {loading ? (
                             <div className="flex justify-center items-center py-12">
                                 <div className="spinner"></div>

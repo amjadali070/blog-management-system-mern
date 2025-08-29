@@ -28,15 +28,10 @@ function App() {
           <div className="min-h-screen bg-gray-50">
             <Navbar />
             <main className="pb-8">
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<Home />} />
+              <Routes><Route path="/" element={<Home />} />
                 <Route path="/post/:id" element={<PostDetail />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-
-                {/* Protected Routes */}
-                <Route path="/dashboard" element={
+                <Route path="/register" element={<Register />} /><Route path="/dashboard" element={
                   <ProtectedRoute>
                     <Dashboard />
                   </ProtectedRoute>
@@ -55,17 +50,11 @@ function App() {
                   <ProtectedRoute>
                     <Profile />
                   </ProtectedRoute>
-                } />
-
-                {/* Admin Routes */}
-                <Route path="/admin" element={
+                } /><Route path="/admin" element={
                   <AdminRoute>
                     <AdminDashboard />
                   </AdminRoute>
-                } />
-
-                {/* 404 Route */}
-                <Route path="*" element={<NotFound />} />
+                } /><Route path="*" element={<NotFound />} />
               </Routes>
             </main>
           </div>

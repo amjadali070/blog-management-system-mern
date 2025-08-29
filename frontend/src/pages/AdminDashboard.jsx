@@ -39,9 +39,7 @@ const AdminDashboard = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Header */}
-                <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"><div className="bg-white rounded-lg shadow-sm p-6 mb-6">
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-2xl font-bold text-gray-900">
@@ -57,10 +55,7 @@ const AdminDashboard = () => {
                             </span>
                         </div>
                     </div>
-                </div>
-
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                </div><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <div className="bg-white rounded-lg shadow-sm p-6">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
@@ -116,10 +111,7 @@ const AdminDashboard = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-
-                {/* All Posts Management */}
-                <div className="bg-white rounded-lg shadow-sm">
+                </div><div className="bg-white rounded-lg shadow-sm">
                     <div className="p-6 border-b border-gray-200">
                         <div className="flex items-center justify-between">
                             <h2 className="text-lg font-medium text-gray-900">All Posts Management</h2>
@@ -130,10 +122,7 @@ const AdminDashboard = () => {
                                 Create New Post
                             </Link>
                         </div>
-                    </div>
-
-                    {/* Posts Table */}
-                    <div className="overflow-hidden">
+                    </div><div className="overflow-hidden">
                         {loading ? (
                             <div className="flex justify-center items-center py-12">
                                 <div className="spinner"></div>
@@ -251,10 +240,7 @@ const AdminDashboard = () => {
                             </div>
                         )}
                     </div>
-                </div>
-
-                {/* Quick Actions */}
-                <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                </div><div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                     <Link
                         to="/create-post"
                         className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"

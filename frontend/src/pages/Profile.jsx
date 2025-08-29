@@ -42,9 +42,7 @@ const Profile = () => {
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
-                        {/* Current User Info */}
-                        <div className="bg-gray-50 rounded-lg p-4">
+                    <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6"><div className="bg-gray-50 rounded-lg p-4">
                             <div className="flex items-center space-x-4">
                                 <InitialsAvatar
                                     name={user?.name}
@@ -60,10 +58,7 @@ const Profile = () => {
                                     </span>
                                 </div>
                             </div>
-                        </div>
-
-                        {/* Name */}
-                        <div>
+                        </div><div>
                             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                                 Name *
                             </label>
@@ -77,10 +72,7 @@ const Profile = () => {
                             {errors.name && (
                                 <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
                             )}
-                        </div>
-
-                        {/* Bio */}
-                        <div>
+                        </div><div>
                             <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-2">
                                 Bio
                             </label>
@@ -97,10 +89,7 @@ const Profile = () => {
                             <p className="mt-1 text-xs text-gray-500">
                                 {watch('bio')?.length || 0}/500 characters
                             </p>
-                        </div>
-
-                        {/* Account Information (Read-only) */}
-                        <div className="border-t border-gray-200 pt-6">
+                        </div><div className="border-t border-gray-200 pt-6">
                             <h3 className="text-lg font-medium text-gray-900 mb-4">Account Information</h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
@@ -120,10 +109,7 @@ const Profile = () => {
                                     </p>
                                 </div>
                             </div>
-                        </div>
-
-                        {/* Submit Button */}
-                        <div className="flex items-center justify-end pt-6 border-t border-gray-200">
+                        </div><div className="flex items-center justify-end pt-6 border-t border-gray-200">
                             <button
                                 type="submit"
                                 disabled={isSubmitting}

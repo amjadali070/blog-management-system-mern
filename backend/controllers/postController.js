@@ -70,7 +70,6 @@ exports.getPosts = async (req, res) => {
             data: posts
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
@@ -111,7 +110,6 @@ exports.getPost = async (req, res) => {
             data: post
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
@@ -146,7 +144,6 @@ exports.createPost = async (req, res) => {
             data: post
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
@@ -187,7 +184,6 @@ exports.updatePost = async (req, res) => {
             data: post
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
@@ -224,7 +220,6 @@ exports.deletePost = async (req, res) => {
             message: 'Post deleted successfully'
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
@@ -262,7 +257,6 @@ exports.getMyPosts = async (req, res) => {
             data: posts
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Server error'
