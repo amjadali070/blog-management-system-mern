@@ -1,4 +1,4 @@
-import { getInitials, getAvatarColor } from '../utils/avatarUtils';
+import { getInitials, getAvatarColor } from '../../utils/avatarUtils';
 
 /**
  * Avatar component with initials
