@@ -1,6 +1,57 @@
 const User = require('../models/User');
 const Post = require('../models/Post');
 
+// @desc    Get all posts for admin (including drafts)
+// @route   GET /api/admin/posts
+// @access  Private/Admin
+exports.getAllPosts = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 50;
+        const startIndex = (page - 1) * limit;
+
+        let query = {};
+
+        // Search functionality
+        if (req.query.search) {
+            query.$or = [
+                { title: { $regex: req.query.search, $options: 'i' } },
+                { content: { $regex: req.query.search, $options: 'i' } },
+                { tags: { $in: [new RegExp(req.query.search, 'i')] } }
+            ];
+        }
+
+        // Filter by status if specified
+        if (req.query.status) {
+            query.status = req.query.status;
+        }
+
+        // Filter by author if specified
+        if (req.query.author) {
+            query.author = req.query.author;
+        }
+
+        const total = await Post.countDocuments(query);
+        const posts = await Post.find(query)
+            .populate('author', 'name avatar email role')
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .skip(startIndex);
+
+        res.json({
+            success: true,
+            count: posts.length,
+            total,
+            data: posts
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+};
+
 // @desc    Get all users (admin only)
 // @route   GET /api/admin/users
 // @access  Private/Admin

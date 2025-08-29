@@ -3,7 +3,8 @@ const {
     getUsers,
     updateUserRole,
     deleteUser,
-    getDashboardStats
+    getDashboardStats,
+    getAllPosts
 } = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/auth');
 
@@ -14,6 +15,7 @@ router.use(protect);
 router.use(authorize('admin'));
 
 router.get('/users', getUsers);
+router.get('/posts', getAllPosts);
 router.put('/users/:id/role', updateUserRole);
 router.delete('/users/:id', deleteUser);
 router.get('/stats', getDashboardStats);

@@ -4,10 +4,14 @@ import { Users, FileText, Eye, TrendingUp, Edit3, Trash2, UserCheck, UserX } fro
 import { useAuth, usePosts } from '../hooks/useAuth';
 import { format } from 'date-fns';
 import { InitialsAvatar } from '../components/ui/InitialsAvatar';
+import { api } from '../utils/api';
+import toast from 'react-hot-toast';
 
 const AdminDashboard = () => {
     const { user } = useAuth();
-    const { posts, loading, fetchPosts, deletePost } = usePosts();
+    const { deletePost } = usePosts();
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState({
         totalPosts: 0,
         publishedPosts: 0,
@@ -15,9 +19,24 @@ const AdminDashboard = () => {
         totalViews: 0,
     });
 
+    // Fetch all posts for admin (including drafts)
+    const fetchAdminPosts = async () => {
+        try {
+            setLoading(true);
+            const response = await api.get('/admin/posts?limit=50');
+            if (response.data.success) {
+                setPosts(response.data.data);
+            }
+        } catch (error) {
+            console.error('Error fetching admin posts:', error);
+            toast.error('Failed to fetch posts');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        fetchPosts(1, 50); // Fetch more posts for admin
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        fetchAdminPosts();
     }, []);
 
     useEffect(() => {
@@ -33,29 +52,34 @@ const AdminDashboard = () => {
 
     const handleDeletePost = async (id) => {
         if (window.confirm('Are you sure you want to delete this post?')) {
-            await deletePost(id);
+            const result = await deletePost(id);
+            if (result && result.success) {
+                // Refresh the admin posts list
+                fetchAdminPosts();
+                toast.success('Post deleted successfully');
+            }
         }
     };
 
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"><div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-900">
-                                Admin Dashboard
-                            </h1>
-                            <p className="text-gray-600 mt-1">
-                                Welcome back, {user?.name}! Manage the entire blog platform.
-                            </p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
-                                Administrator
-                            </span>
-                        </div>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-900">
+                            Admin Dashboard
+                        </h1>
+                        <p className="text-gray-600 mt-1">
+                            Welcome back, {user?.name}! Manage the entire blog platform.
+                        </p>
                     </div>
-                </div><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div className="flex items-center space-x-2">
+                        <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
+                            Administrator
+                        </span>
+                    </div>
+                </div>
+            </div><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <div className="bg-white rounded-lg shadow-sm p-6">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
