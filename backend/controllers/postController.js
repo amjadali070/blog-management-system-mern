@@ -133,7 +133,7 @@ exports.createPost = async (req, res) => {
         }
 
         // Add author to req.body
-        req.body.author = req.user.id;
+        req.body.author = req.user._id;
 
         const post = await Post.create(req.body);
         await post.populate('author', 'name avatar');
@@ -166,7 +166,7 @@ exports.updatePost = async (req, res) => {
         }
 
         // Check if user owns the post or is admin
-        if (post.author.toString() !== req.user.id && req.user.role !== 'admin') {
+        if (post.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
             return res.status(403).json({
                 success: false,
                 message: 'Not authorized to update this post'
@@ -206,7 +206,7 @@ exports.deletePost = async (req, res) => {
         }
 
         // Check if user owns the post or is admin
-        if (post.author.toString() !== req.user.id && req.user.role !== 'admin') {
+        if (post.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
             return res.status(403).json({
                 success: false,
                 message: 'Not authorized to delete this post'
@@ -236,7 +236,7 @@ exports.getMyPosts = async (req, res) => {
         const limit = parseInt(req.query.limit, 10) || 10;
         const startIndex = (page - 1) * limit;
 
-        let query = { author: req.user.id };
+        let query = { author: req.user._id };
 
         // Filter by status
         if (req.query.status) {

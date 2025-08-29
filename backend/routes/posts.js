@@ -12,7 +12,7 @@ const {
     getPostComments,
     addComment
 } = require('../controllers/commentController');
-const { protect, authorize } = require('../middleware/auth');
+const { protect, authorize, optionalAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -26,7 +26,7 @@ router.route('/')
 router.get('/my-posts', protect, getMyPosts);
 
 router.route('/:id')
-    .get(getPost)
+    .get(optionalAuth, getPost)
     .put(protect, updatePost)
     .delete(protect, deletePost);
 

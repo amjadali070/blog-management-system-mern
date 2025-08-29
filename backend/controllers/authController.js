@@ -130,7 +130,7 @@ exports.login = async (req, res) => {
 // @access  Private
 exports.getMe = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user._id);
 
         res.json({
             success: true,
@@ -161,7 +161,7 @@ exports.updateProfile = async (req, res) => {
         const { name, bio, avatar } = req.body;
 
         const user = await User.findByIdAndUpdate(
-            req.user.id,
+            req.user._id,
             { name, bio, avatar },
             { new: true, runValidators: true }
         );
