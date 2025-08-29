@@ -1,0 +1,26 @@
+{
+    "name": "blog-management-system-mern",
+    "version": "1.0.0",
+    "description": "A full-stack blog management system built with MERN stack",
+    "main": "index.js",
+    "scripts": {
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "server": "cd backend && npm run dev",
+        "client": "cd frontend && npm run dev",
+        "build": "cd frontend && npm run build",
+        "start": "cd backend && npm start"
+    },
+    "keywords": [
+        "mern",
+        "blog",
+        "react",
+        "nodejs",
+        "mongodb",
+        "express"
+    ],
+    "author": "Amjad Ali",
+    "license": "ISC",
+    "devDependencies": {
+        "concurrently": "^8.2.0"
+    }
+}
